@@ -1,4 +1,6 @@
 import logo from "./assets/logo-nlw-expert.svg";
+import { NewNoteCard } from "./components/new-note-card";
+import { NoteCard } from "./components/note-card";
 export function App() {
   return (
     <div className="mx-auto max-w-6xl my-12 space-y-6">
@@ -12,24 +14,12 @@ export function App() {
       </form>
 
       <div className="h-[1px] bg-slate-700" />
-      <div className="grid grid-cols-3 auto-rows-[250px] gap-6">
-        <button className="rounded-md bg-slate-700 outline-none relative overflow-hidden">
-          <div className="absolute top-0 right-0 bg-slate-800 aspect-square flex justify-center items-center" >icone</div>
-          <span>Adicionar nota</span>
-          <p>Grave uma nota em áudio que será convertida para texto automaticamente.</p>
-        </button>
+      <div className="grid grid-cols-3 gap-6 auto-rows-[250px]">
 
-        <button className="rounded-md bg-slate-800 outline-none relative overflow-hidden">
-          <div className=" absolute bottom-0 left-0 right-0 h-1/2 w-full bg-gradient-to-t from-black/60 to-black/0"/>
-        </button>
-
-        <button className="rounded-md bg-slate-800 outline-none relative overflow-hidden">
-          <div className=" absolute bottom-0 left-0 right-0 h-1/2 w-full bg-gradient-to-t from-black/60 to-black/0"/>
-        </button>
-
-        <button className="rounded-md bg-slate-800 outline-none relative overflow-hidden">
-          <div className=" absolute bottom-0 left-0 right-0 h-1/2 w-full bg-gradient-to-t from-black/60 to-black/0"/>
-        </button>
+        <NewNoteCard/>
+        <NoteCard/>
+      
+        
       </div>
     </div>
   );
