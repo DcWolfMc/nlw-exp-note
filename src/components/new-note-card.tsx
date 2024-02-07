@@ -1,6 +1,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { ChangeEvent, FormEvent, FunctionComponent, useState } from "react";
 import { X, ArrowUpRight } from "lucide-react";
+import { toast } from "sonner";
 export const NewNoteCard: FunctionComponent = () => {
   const [showOnboarding, setShowOnboarding] = useState<boolean>(true);
   const [content, setContent] = useState<string>("");
@@ -14,6 +15,7 @@ export const NewNoteCard: FunctionComponent = () => {
   }
   function handleSaveNote(event: FormEvent) {
     event.preventDefault();
+    toast.success("Nota criada com sucesso!")
     console.log(content);
   }
   return (
@@ -37,8 +39,8 @@ export const NewNoteCard: FunctionComponent = () => {
           <Dialog.Close className="absolute right-0 top-0 p-1.5 bg-slate-800 text-slate-400 hover:text-slate-100 outline-none focus-visible:ring-2 focus-visible:ring-lime-400">
             <X className="size-6" />
           </Dialog.Close>
-          <form className="flex-1 flex flex-col">
-            <div className="flex-1 flex flex-col gap-3 p-6" onSubmit={handleSaveNote}>
+          <form className="flex-1 flex flex-col" onSubmit={handleSaveNote}>
+            <div className="flex-1 flex flex-col gap-3 p-6">
               <span className="text-sm font-medium text-slate-300 capitalize">
                 Adicionar nota
               </span>
