@@ -6,7 +6,7 @@ import { Toaster } from "sonner";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <Toaster richColors />
+    <Toaster  richColors toastOptions={{classNames:{title:'!font-semibold'}}}/>
     <App />
   </React.StrictMode>
 );
