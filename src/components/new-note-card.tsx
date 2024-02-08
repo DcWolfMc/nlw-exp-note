@@ -2,10 +2,13 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { ChangeEvent, FormEvent, FunctionComponent, useState } from "react";
 import { X, ArrowUpRight } from "lucide-react";
 import { toast } from "sonner";
-interface NewNoteCardProps{
-  onNoteCreated:(content:string)=> void
+interface NewNoteCardProps {
+  onNoteCreated: (content: string) => void;
 }
-export const NewNoteCard: FunctionComponent<NewNoteCardProps> = ({onNoteCreated}) => {
+let speechRecognition: SpeechRecognition | null = null;
+export const NewNoteCard: FunctionComponent<NewNoteCardProps> = ({
+  onNoteCreated,
+}) => {
   const [showOnboarding, setShowOnboarding] = useState<boolean>(true);
   const [content, setContent] = useState<string>("");
   const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -25,20 +28,63 @@ export const NewNoteCard: FunctionComponent<NewNoteCardProps> = ({onNoteCreated}
           "utilize de texto ou do sistema de gravação de notas para adicionar conteúdo a uma nova nota",
       });
     } else {
-      onNoteCreated(content)
-      setContent("")
-      setShowOnboarding(true)
+      onNoteCreated(content);
+      setContent("");
+      setShowOnboarding(true);
       toast.success("Nota criada com sucesso!");
-      
     }
   }
   function handleStartRecording() {
+    const isSpeechRecognitionAPIAvailable =
+      "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
+
+    if (!isSpeechRecognitionAPIAvailable) {
+      toast.warning("Reconhecimento de Fala não suportado!", {
+        description:
+          "Seu navegador não suporta o reconhecimento de fala. Tente com outro.",
+      });
+      return;
+    }
     setIsRecording(true);
-    setShowOnboarding(false)
+    setShowOnboarding(false);
+
+    console.log("window.name", window.name);
+    console.log("window.navigator", window.navigator);
+
+    const SpeechRecognitionAPI =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+    // const AudioRecorder = window.navigator.
+    speechRecognition = new SpeechRecognitionAPI();
+
+    speechRecognition.lang = "pt-BR";
+    speechRecognition.continuous = true;
+    speechRecognition.interimResults = true;
+    speechRecognition.maxAlternatives = 1;
+
+    speechRecognition.onresult = (event) => {
+      const transcription = Array.from(event.results).reduce(
+        (text, result) => text.concat(result[0].transcript),
+        ""
+      );
+      setContent(transcription);
+    };
+    speechRecognition.onerror = (event) => {
+      console.log("Error", event);
+    };
+    speechRecognition.start();
   }
   function handleStopRecording() {
-    setIsRecording(false);
+    if (speechRecognition) {
+      speechRecognition.stop();
+      setIsRecording(false);
+    }
+  }
+  function handleCloseModal() {
+    console.log("chamado");
+    handleStopRecording()
     setShowOnboarding(true);
+    setIsRecording(false);
+    setContent("");
   }
   return (
     <Dialog.Root>
@@ -58,10 +104,13 @@ export const NewNoteCard: FunctionComponent<NewNoteCardProps> = ({onNoteCreated}
         <Dialog.Overlay className="inset-0 fixed bg-black/50 flex-1" />
 
         <Dialog.Content className="z-10 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-3 bg-slate-700 rounded-md w-full h-[60vh] max-w-[640px] overflow-hidden outline-none">
-          <Dialog.Close className="absolute right-0 top-0 p-1.5 bg-slate-800 text-slate-400 hover:text-slate-100 outline-none focus-visible:ring-2 focus-visible:ring-lime-400">
+          <Dialog.Close
+            onClick={handleCloseModal}
+            className="absolute right-0 top-0 p-1.5 bg-slate-800 text-slate-400 hover:text-slate-100 outline-none focus-visible:ring-2 focus-visible:ring-lime-400"
+          >
             <X className="size-6" />
           </Dialog.Close>
-          <form className="flex-1 flex flex-col" >
+          <form className="flex-1 flex flex-col">
             <div className="flex-1 flex flex-col gap-3 p-6">
               <span className="text-sm font-medium text-slate-300 capitalize">
                 Adicionar nota
