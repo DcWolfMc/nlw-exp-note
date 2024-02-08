@@ -88,7 +88,7 @@ export const NewNoteCard: FunctionComponent<NewNoteCardProps> = ({
   }
   return (
     <Dialog.Root>
-      <Dialog.Trigger className="flex flex-col justify-start items-start text-left rounded-md bg-slate-700 outline-none relative overflow-hidden p-5 space-y-3 hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
+      <Dialog.Trigger className="flex flex-col justify-start items-start  max-w-[388px] w-full text-left rounded-md bg-slate-700 outline-none relative overflow-hidden p-5 space-y-3 hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
         <div className="absolute top-0 right-0 p-1.5 bg-slate-800 aspect-square flex justify-center items-center">
           <ArrowUpRight className="size-6" />
         </div>
@@ -103,7 +103,7 @@ export const NewNoteCard: FunctionComponent<NewNoteCardProps> = ({
       <Dialog.Portal>
         <Dialog.Overlay className="inset-0 fixed bg-black/50 flex-1" />
 
-        <Dialog.Content className="z-10 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-3 bg-slate-700 rounded-md w-full h-[60vh] max-w-[640px] overflow-hidden outline-none">
+        <Dialog.Content className="z-10 fixed inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 flex flex-col gap-3 bg-slate-700 md:rounded-md w-full md:h-[60vh] md:max-w-[640px] overflow-hidden outline-none">
           <Dialog.Close
             onClick={handleCloseModal}
             className="absolute right-0 top-0 p-1.5 bg-slate-800 text-slate-400 hover:text-slate-100 outline-none focus-visible:ring-2 focus-visible:ring-lime-400"
